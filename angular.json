@@ -119,6 +119,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "nihongo-tracker-ui"
+    }
+  },
+  "defaultProject": "nihongo-tracker-ui",
+  "cli": {
+    "analytics": "169c045f-9620-44d7-9bb8-7dd5c58cb894"
+  }
 }
