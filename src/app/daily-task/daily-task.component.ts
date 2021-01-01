@@ -11,7 +11,7 @@ export class DailyTaskComponent implements OnInit {
 
   constructor(private dailyTaskService: DailyTaskService) { }
 
-  tasks: DailyTask;
+  tasks: DailyTask[];
 
   getTasks(): void {
     this.dailyTaskService.getTasks().subscribe(task => this.tasks = task);

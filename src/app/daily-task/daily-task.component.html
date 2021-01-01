@@ -1,2 +1,18 @@
-<p>daily-task works!</p>
-{{tasks.dueDate}}
+<table>
+    <thead>
+        <th>Chapter Number</th>
+        <th>Page Number</th>
+        <th>Due Date</th>
+        <th>Completed</th>
+        <th>User</th>
+    </thead>
+    <tbody>
+        <tr *ngFor="let task of tasks">
+            <td>{{task.chapterNumber}}</td>
+            <td>{{task.pageNumber}}</td>
+            <td>{{task.dueDate}}</td>
+            <td>{{task.isComplete}}</td>
+            <td>{{task.userName}}</td>
+        </tr>
+    </tbody>
+</table>
