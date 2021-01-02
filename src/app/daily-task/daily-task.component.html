@@ -1,3 +1,15 @@
+<div>
+    <label>New Task:
+        <input #chapterNumber />
+        <input #pageNumber />
+        <input [ngModel]="dueDate" type="date" name="dueDate" #dueDate/>
+.    </label>
+    <!-- (click) passes input value to add() and then clears the input -->
+    <button (click)="addNewTask(chapterNumber.value, pageNumber.value, dueDate.value);">
+        add
+    </button>
+</div>
+
 <table>
     <thead>
         <th>Chapter Number</th>
@@ -7,7 +19,7 @@
         <th>User</th>
     </thead>
     <tbody>
-        <tr *ngFor="let task of tasks">
+        <tr *ngFor="let task of tasks;">
             <td>{{task.chapterNumber}}</td>
             <td>{{task.pageNumber}}</td>
             <td>{{task.dueDate}}</td>

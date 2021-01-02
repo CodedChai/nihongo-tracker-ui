@@ -12,6 +12,7 @@ export class DailyTaskService {
 
   private baseUrl = 'http://localhost:8080/v1';
   private summaryPath = '/tasks';
+  private createPath = '/tasks/create';
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -30,7 +31,17 @@ export class DailyTaskService {
       .pipe(
         tap(_ => console.log('fetched tasks')),
         catchError(this.handleError<DailyTask[]>('getTasks', []))
-      );;
+      );
+  }
+
+  addNewTask(chapterNumber: number, pageNumber: number, dueDate: string): Observable<DailyTask> {
+    let dailyTask = new DailyTask(pageNumber, chapterNumber, dueDate, 'Connor');
+
+    return this.http.post<DailyTask>(this.baseUrl + this.createPath, dailyTask, this.httpOptions)
+      .pipe(
+        tap((dailyTask: DailyTask) => console.log(`added task ${dailyTask}`)),
+        catchError(this.handleError<DailyTask>('addNewTask'))
+      );
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
