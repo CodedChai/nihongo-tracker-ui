@@ -10,9 +10,9 @@ import { of } from 'rxjs';
 })
 export class DailyTaskService {
 
-  private baseUrl = 'http://localhost:8080/v1';
-  private summaryPath = '/tasks';
-  private createPath = '/tasks/create';
+  private baseUrl = 'http://localhost:8080/v1/tasks/';
+  private createPath = 'create';
+  private updateToCompletPath = '/complete';
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -27,7 +27,7 @@ export class DailyTaskService {
   constructor(private http: HttpClient) { }
 
   getTasks(): Observable<DailyTask[]> {
-    return this.http.get<DailyTask[]>(this.baseUrl + this.summaryPath, this.httpOptions)
+    return this.http.get<DailyTask[]>(this.baseUrl, this.httpOptions)
       .pipe(
         tap(_ => console.log('fetched tasks')),
         catchError(this.handleError<DailyTask[]>('getTasks', []))
@@ -41,6 +41,17 @@ export class DailyTaskService {
       .pipe(
         tap((dailyTask: DailyTask) => console.log(`added task ${dailyTask}`)),
         catchError(this.handleError<DailyTask>('addNewTask'))
+      );
+  }
+
+  updateTaskToComplete(dailyTask: DailyTask): Observable<DailyTask> {
+
+    if(!dailyTask._id || dailyTask.isComplete) { return of(dailyTask);}
+
+    return this.http.put<DailyTask>(this.baseUrl + dailyTask._id + this.updateToCompletPath, dailyTask, this.httpOptions)
+      .pipe(
+        tap((dailyTask: DailyTask) => console.log(`completed task ${dailyTask}`)),
+        catchError(this.handleError<DailyTask>('updateTaskToComplete'))
       );
   }
 

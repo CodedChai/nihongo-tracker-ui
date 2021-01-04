@@ -19,12 +19,13 @@
         <th>User</th>
     </thead>
     <tbody>
-        <tr *ngFor="let task of tasks;">
+        <tr *ngFor="let task of tasks; index as i;">
             <td>{{task.chapterNumber}}</td>
             <td>{{task.pageNumber}}</td>
             <td>{{task.dueDate}}</td>
             <td>{{task.isComplete}}</td>
             <td>{{task.userName}}</td>
+            <button (click)="updateTaskToComplete(i)">complete</button>
         </tr>
     </tbody>
 </table>

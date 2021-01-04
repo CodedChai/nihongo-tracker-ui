@@ -39,4 +39,19 @@ export class DailyTaskComponent implements OnInit {
         this.tasks.push(newTask);
       });
   }
+
+  updateTaskToComplete(index: number): void {
+
+    let dailyTask = this.tasks[index];
+
+    console.log(`update task to complete: id ${dailyTask._id} index ${index}`);
+
+    if (!dailyTask) { return; }
+
+    this.dailyTaskService.updateTaskToComplete(dailyTask)
+      .subscribe(updatedTask => {
+        console.log(`new task: ${JSON.stringify(updatedTask)}`);
+        this.tasks[index] = updatedTask;
+      });
+  }
 }
