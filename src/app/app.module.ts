@@ -7,17 +7,22 @@ import { AppComponent } from './app.component';
 import { DailyTaskComponent } from './daily-task/daily-task.component';
 import { HttpClientModule } from '@angular/common/http';
 
+import { AppFirebaseModule } from './app-firebase/app-firebase.module';
+import { HeaderComponent } from './header/header.component'
+
 @NgModule({
   declarations: [
     AppComponent,
-    DailyTaskComponent
+    DailyTaskComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AppFirebaseModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,0 +1,14 @@
+<span class="spacer"></span>
+<ng-container *ngIf="user$ | async as user; else loginIcon">
+    <button (click)="logout()">
+        logout
+    </button>
+
+</ng-container>
+
+
+<ng-template #loginIcon>
+    <button (click)="login()">
+        login
+    </button>
+</ng-template>
