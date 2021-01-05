@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { DailyTask } from './daily-task/dailyTask';
+import { DailyTask } from '../daily-task/dailyTask';
 import { catchError, map, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { User } from '../interfaces/user';
 
 @Injectable({
   providedIn: 'root'
@@ -14,17 +15,38 @@ export class DailyTaskService {
   private createPath = 'create';
   private updateToCompletPath = '/complete';
 
+  private user: User;
+
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
-      'X-USER-NAME': 'Connor',
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
       "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
     })
   };
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private ngZone: NgZone,
+  ) {
+    this.getUserFromLocalStorage();
+  }
+
+  getUserFromLocalStorage() {
+    let localStorageUser = localStorage.getItem('user');
+    if (localStorageUser) {
+      console.log(`received user ${localStorageUser}`);
+      this.user = JSON.parse(localStorageUser);
+      this.addUserNameHeader();
+    } else {
+      console.log('uh ohhhh!');
+    }
+  }
+
+  addUserNameHeader() {
+    this.httpOptions.headers.append('X-USER-NAME', this.user.uid);
+  }
 
   getTasks(): Observable<DailyTask[]> {
     return this.http.get<DailyTask[]>(this.baseUrl, this.httpOptions)
@@ -46,7 +68,7 @@ export class DailyTaskService {
 
   updateTaskToComplete(dailyTask: DailyTask): Observable<DailyTask> {
 
-    if(!dailyTask._id || dailyTask.isComplete) { return of(dailyTask);}
+    if (!dailyTask._id || dailyTask.isComplete) { return of(dailyTask); }
 
     return this.http.put<DailyTask>(this.baseUrl + dailyTask._id + this.updateToCompletPath, dailyTask, this.httpOptions)
       .pipe(
