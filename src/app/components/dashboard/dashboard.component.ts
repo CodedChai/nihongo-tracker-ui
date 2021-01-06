@@ -20,7 +20,9 @@ export class DashboardComponent implements OnInit {
   }
 
   getUserLoggedIn() {
-    this.user = this.authservice.getUser();
+    this.authservice.getUser().then(user => {
+      this.user = user;
+    });
   }
 
   logout() {

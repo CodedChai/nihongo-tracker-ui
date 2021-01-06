@@ -34,9 +34,16 @@ export class DailyTaskService {
   ) { }
 
   ngOnInit() {
-    this.user = this.authservice.getUser();
+    this.initUser();
+  }
 
-    this.addUserNameHeader();
+  initUser() {
+    if (!this.user) {
+      this.authservice.getUser().then(user => {
+        this.user = user;
+        this.addUserNameHeader();
+      });
+    }
   }
 
   addUserNameHeader() {
@@ -44,6 +51,9 @@ export class DailyTaskService {
   }
 
   getTasks(): Observable<DailyTask[]> {
+
+    this.initUser();
+
     return this.http.get<DailyTask[]>(this.baseUrl, this.httpOptions)
       .pipe(
         tap(_ => console.log('fetched tasks')),
@@ -52,6 +62,9 @@ export class DailyTaskService {
   }
 
   addNewTask(chapterNumber: number, pageNumber: number, dueDate: string): Observable<DailyTask> {
+
+    this.initUser()
+
     let dailyTask = new DailyTask(pageNumber, chapterNumber, dueDate, this.user.uid);
 
     return this.http.post<DailyTask>(this.baseUrl + this.createPath, dailyTask, this.httpOptions)
@@ -64,6 +77,8 @@ export class DailyTaskService {
   updateTaskToComplete(dailyTask: DailyTask): Observable<DailyTask> {
 
     if (!dailyTask._id || dailyTask.isComplete) { return of(dailyTask); }
+
+    this.initUser();
 
     return this.http.put<DailyTask>(this.baseUrl + dailyTask._id + this.updateToCompletPath, dailyTask, this.httpOptions)
       .pipe(

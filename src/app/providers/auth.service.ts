@@ -4,7 +4,7 @@ import firebase from 'firebase/app';
 import { Router } from '@angular/router';
 import { User } from '../interfaces/user';
 import { UserService } from './user.service';
-import { Observable, from } from 'rxjs';
+import { Observable, from, of, EMPTY } from 'rxjs';
 
 @Injectable()
 export class AuthService {
@@ -23,24 +23,27 @@ export class AuthService {
     this.getUser();
   }
 
-  getUser(): User {
+  async getUser(): Promise<User> {
     if (!localStorage.getItem('user')) {
-      this.getDataFromFirebase();
+      return await this.getDataFromFirebase().toPromise();
     }
 
     return JSON.parse(localStorage.getItem('user'));
   }
 
-  getDataFromFirebase() {
+  getDataFromFirebase(): Observable<User> {
     this.afAuth.authState.subscribe(auth => {
       if (auth) {
         this.user = auth; // save data firebase on user
         console.log('Authenticated');
         this.userservice.setUserLoggedIn(this.user); // set user data from firebase on local storage
+        return this.user;
       } else {
         console.log('Not authenticated');
       }
     });
+
+    return EMPTY;
   }
 
   loginWithGoogle(): Observable<firebase.auth.UserCredential> {
