@@ -13,14 +13,14 @@ export class DashboardComponent implements OnInit {
   constructor(
     public authservice: AuthService,
   ) {
-    this.getUserLoggedIn();
   }
 
   ngOnInit() {
+    this.getUserLoggedIn();
   }
 
   getUserLoggedIn() {
-    this.user = JSON.parse(localStorage.getItem('user'));
+    this.user = this.authservice.getUser();
   }
 
   logout() {

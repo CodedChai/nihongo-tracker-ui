@@ -17,19 +17,18 @@ export class AuthService {
     private router: Router,
     public userservice: UserService
   ) {
-    this.checkLocalStorage();
   }
 
-  /*
-   * If localStoge is empty, we call getDataFromFirebase
-   * method set user data from firebase on localStorage
-   */
-  checkLocalStorage() {
+  ngOnInit() {
+    this.getUser();
+  }
+
+  getUser(): User {
     if (!localStorage.getItem('user')) {
       this.getDataFromFirebase();
-    } else {
-      console.log('localStorage ready!');
     }
+
+    return JSON.parse(localStorage.getItem('user'));
   }
 
   getDataFromFirebase() {

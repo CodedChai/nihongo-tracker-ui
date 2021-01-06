@@ -5,6 +5,7 @@ import { DailyTask } from '../interfaces/dailyTask';
 import { catchError, map, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { User } from '../interfaces/user';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -29,19 +30,13 @@ export class DailyTaskService {
   constructor(
     private http: HttpClient,
     private ngZone: NgZone,
-  ) {
-    this.getUserFromLocalStorage();
-  }
+    private authservice: AuthService
+  ) { }
 
-  getUserFromLocalStorage() {
-    let localStorageUser = localStorage.getItem('user');
-    if (localStorageUser) {
-      console.log(`received user ${localStorageUser}`);
-      this.user = JSON.parse(localStorageUser);
-      this.addUserNameHeader();
-    } else {
-      console.log('uh ohhhh!');
-    }
+  ngOnInit() {
+    this.user = this.authservice.getUser();
+
+    this.addUserNameHeader();
   }
 
   addUserNameHeader() {
