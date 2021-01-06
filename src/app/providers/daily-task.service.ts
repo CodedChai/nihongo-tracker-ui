@@ -57,7 +57,7 @@ export class DailyTaskService {
   }
 
   addNewTask(chapterNumber: number, pageNumber: number, dueDate: string): Observable<DailyTask> {
-    let dailyTask = new DailyTask(pageNumber, chapterNumber, dueDate, 'Connor');
+    let dailyTask = new DailyTask(pageNumber, chapterNumber, dueDate, this.user.uid);
 
     return this.http.post<DailyTask>(this.baseUrl + this.createPath, dailyTask, this.httpOptions)
       .pipe(
