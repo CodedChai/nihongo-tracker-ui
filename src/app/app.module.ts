@@ -10,6 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppFirebaseModule } from './app-firebase/app-firebase.module';
 import { LoginComponent } from './components/login/login.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component'
+import { AuthService } from './providers/auth.service';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component'
     ReactiveFormsModule,
     AppFirebaseModule
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

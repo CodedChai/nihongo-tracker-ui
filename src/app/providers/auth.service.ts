@@ -32,7 +32,6 @@ export class AuthService {
     }
   }
 
-
   getDataFromFirebase() {
     this.afAuth.authState.subscribe(auth => {
       if (auth) {
@@ -44,7 +43,6 @@ export class AuthService {
       }
     });
   }
-
 
   loginWithGoogle(): Observable<firebase.auth.UserCredential> {
     const authProvider = new firebase.auth.GoogleAuthProvider();

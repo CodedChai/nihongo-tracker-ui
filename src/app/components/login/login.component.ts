@@ -1,15 +1,18 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from './../../providers/auth.service';
-import { Router } from '@angular/router'; @Component({
+
+@Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styles: []
 })
+
 export class LoginComponent implements OnInit {
 
   constructor(
     private authservice: AuthService,
-    private router: Router
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -20,6 +23,8 @@ export class LoginComponent implements OnInit {
   }
 
   loginWithGoogle() {
-    this.authservice.loginWithGoogle();
+    this.authservice.loginWithGoogle().subscribe(() => {
+      this.router.navigate(['dashboard']);
+    });
   }
 }

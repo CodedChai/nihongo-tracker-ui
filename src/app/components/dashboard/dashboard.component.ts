@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from './../../providers/auth.service';
-import { UserService } from './../../providers/user.service';
 import { User } from './../../interfaces/user';
+import { AuthService } from './../../providers/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,7 +11,7 @@ export class DashboardComponent implements OnInit {
   user: User;
 
   constructor(
-    public authservice: AuthService
+    public authservice: AuthService,
   ) {
     this.getUserLoggedIn();
   }

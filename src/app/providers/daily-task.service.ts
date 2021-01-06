@@ -45,7 +45,7 @@ export class DailyTaskService {
   }
 
   addUserNameHeader() {
-    this.httpOptions.headers.append('X-USER-NAME', this.user.userId);
+    this.httpOptions.headers = this.httpOptions.headers.append('X-USER-NAME', this.user.uid);
   }
 
   getTasks(): Observable<DailyTask[]> {
