@@ -1,6 +1,6 @@
-import { DailyTaskService } from './../daily-task.service';
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { DailyTask } from './dailyTask';
+import { DailyTaskService } from '../../providers/daily-task.service';
+import { Component, OnInit } from '@angular/core';
+import { DailyTask } from '../../interfaces/dailyTask';
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -11,7 +11,10 @@ import { DatePipe } from '@angular/common';
 })
 export class DailyTaskComponent implements OnInit {
 
-  constructor(private dailyTaskService: DailyTaskService, private datePipe: DatePipe,     private changeDetection: ChangeDetectorRef) { }
+  constructor(
+    private dailyTaskService: DailyTaskService,
+    private datePipe: DatePipe,
+  ) { }
 
   tasks: DailyTask[];
 
@@ -26,7 +29,7 @@ export class DailyTaskComponent implements OnInit {
 
   addNewTask(chapterNumber: number, pageNumber: number, dueDate: Date): void {
     console.log(`add new task: chapter ${chapterNumber} page: ${pageNumber} date: ${dueDate}`);
-    if (!chapterNumber || ! pageNumber || !dueDate) { return; }
+    if (!chapterNumber || !pageNumber || !dueDate) { return; }
     console.log(dueDate);
 
     let formattedDate = this.datePipe.transform(dueDate, 'yyyy-MM-dd');
@@ -48,10 +51,9 @@ export class DailyTaskComponent implements OnInit {
 
     if (!dailyTask) { return; }
 
-    this.dailyTaskService.updateTaskToComplete(dailyTask)
-      .subscribe(updatedTask => {
-        console.log(`new task: ${JSON.stringify(updatedTask)}`);
-        this.tasks[index] = updatedTask;
-      });
+    this.dailyTaskService.updateTaskToComplete(dailyTask).subscribe(updatedTask => {
+      console.log(`new task: ${JSON.stringify(updatedTask)}`);
+      this.tasks[index] = updatedTask;
+    });
   }
 }

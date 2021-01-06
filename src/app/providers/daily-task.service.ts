@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { DailyTask } from '../daily-task/dailyTask';
+import { DailyTask } from '../interfaces/dailyTask';
 import { catchError, map, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { User } from '../interfaces/user';
@@ -45,7 +45,7 @@ export class DailyTaskService {
   }
 
   addUserNameHeader() {
-    this.httpOptions.headers.append('X-USER-NAME', this.user.uid);
+    this.httpOptions.headers.append('X-USER-NAME', this.user.userId);
   }
 
   getTasks(): Observable<DailyTask[]> {
