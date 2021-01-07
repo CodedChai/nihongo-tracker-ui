@@ -37,12 +37,16 @@ export class DailyTaskService {
     this.initUser();
   }
 
-  initUser() {
+  initUser(): User {
     if (!this.user) {
       this.authservice.getUser().then(user => {
         this.user = user;
         this.addUserNameHeader();
+        return user;
       });
+    } else {
+      this.addUserNameHeader();
+      return this.user;
     }
   }
 
@@ -63,7 +67,7 @@ export class DailyTaskService {
 
   addNewTask(chapterNumber: number, pageNumber: number, dueDate: string): Observable<DailyTask> {
 
-    this.initUser()
+    this.initUser();
 
     let dailyTask = new DailyTask(pageNumber, chapterNumber, dueDate, this.user.uid);
 

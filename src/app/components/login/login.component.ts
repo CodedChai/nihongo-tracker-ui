@@ -23,7 +23,9 @@ export class LoginComponent implements OnInit {
   }
 
   loginWithGoogle() {
-    this.authservice.loginWithGoogle().subscribe(() => {
+    this.authservice.loginWithGoogle().subscribe(user => {
+      localStorage.setItem('user', JSON.stringify(user));
+
       this.router.navigate(['dashboard']);
     });
   }
