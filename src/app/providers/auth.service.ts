@@ -3,7 +3,6 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import firebase from 'firebase/app';
 import { Router } from '@angular/router';
 import { User } from '../interfaces/user';
-import { UserService } from './user.service';
 import { Observable, from, of, EMPTY } from 'rxjs';
 
 @Injectable()
@@ -15,7 +14,6 @@ export class AuthService {
     private ngZone: NgZone,
     public afAuth: AngularFireAuth,
     private router: Router,
-    public userservice: UserService
   ) {
   }
 
@@ -23,12 +21,14 @@ export class AuthService {
     this.getUser();
   }
 
-  async getUser(): Promise<User> {
+  getUser(): Observable<User> {
     if (!localStorage.getItem('user')) {
-      return await this.getDataFromFirebase().toPromise();
+      return this.getDataFromFirebase();
     }
 
-    return JSON.parse(localStorage.getItem('user'));
+    console.log("found user in local storage");
+
+    return of(JSON.parse(localStorage.getItem('user')));
   }
 
   getDataFromFirebase(): Observable<User> {
@@ -36,8 +36,11 @@ export class AuthService {
       if (auth) {
         this.user = auth; // save data firebase on user
         console.log('Authenticated');
-        this.userservice.setUserLoggedIn(this.user); // set user data from firebase on local storage
-        return this.user;
+        localStorage.setItem('user', JSON.stringify(auth));
+        localStorage.setItem('userId', auth.uid);
+        console.log('saved to localStorage');
+
+        return auth;
       } else {
         console.log('Not authenticated');
       }
@@ -52,7 +55,7 @@ export class AuthService {
   }
 
   logout() {
-    this.userservice.clearLocalStorage();
+    localStorage.clear();
     this.afAuth.signOut();
   }
 }

@@ -13,14 +13,28 @@ export class DashboardComponent implements OnInit {
   constructor(
     public authservice: AuthService,
   ) {
+    this.initUser();
   }
 
   ngOnInit() {
-    this.getUserLoggedIn();
   }
 
+  initUser(): User {
+    if (!this.user) {
+      this.authservice.getUser().subscribe(user => {
+        this.user = user;
+        console.log('set user');
+        return user;
+      });
+    } else {
+      console.log('user already set');
+      return this.user;
+    }
+  }
+
+
   getUserLoggedIn() {
-    this.authservice.getUser().then(user => {
+    this.authservice.getUser().subscribe(user => {
       this.user = user;
     });
   }

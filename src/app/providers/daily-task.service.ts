@@ -1,5 +1,5 @@
 import { Injectable, NgZone } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { DailyTask } from '../interfaces/dailyTask';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -18,47 +18,35 @@ export class DailyTaskService {
 
   private user: User;
 
-  httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json',
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-      "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
-    })
-  };
-
   constructor(
     private http: HttpClient,
     private ngZone: NgZone,
     private authservice: AuthService
-  ) { }
+  ) {
+    this.initUser();
+  }
 
   ngOnInit() {
-    this.initUser();
   }
 
   initUser(): User {
     if (!this.user) {
-      this.authservice.getUser().then(user => {
+      this.authservice.getUser().subscribe(user => {
         this.user = user;
-        this.addUserNameHeader();
+        console.log('set user');
         return user;
       });
     } else {
-      this.addUserNameHeader();
+      console.log('user already set');
       return this.user;
     }
   }
 
-  addUserNameHeader() {
-    this.httpOptions.headers = this.httpOptions.headers.append('X-USER-NAME', this.user.uid);
-  }
-
   getTasks(): Observable<DailyTask[]> {
 
-    this.initUser();
+    console.log(`user ${JSON.stringify(this.user)}`);
 
-    return this.http.get<DailyTask[]>(this.baseUrl, this.httpOptions)
+    return this.http.get<DailyTask[]>(this.baseUrl)
       .pipe(
         tap(_ => console.log('fetched tasks')),
         catchError(this.handleError<DailyTask[]>('getTasks', []))
@@ -66,12 +54,9 @@ export class DailyTaskService {
   }
 
   addNewTask(chapterNumber: number, pageNumber: number, dueDate: string): Observable<DailyTask> {
-
-    this.initUser();
-
     let dailyTask = new DailyTask(pageNumber, chapterNumber, dueDate, this.user.uid);
 
-    return this.http.post<DailyTask>(this.baseUrl + this.createPath, dailyTask, this.httpOptions)
+    return this.http.post<DailyTask>(this.baseUrl + this.createPath, dailyTask)
       .pipe(
         tap((dailyTask: DailyTask) => console.log(`added task ${dailyTask}`)),
         catchError(this.handleError<DailyTask>('addNewTask'))
@@ -82,9 +67,7 @@ export class DailyTaskService {
 
     if (!dailyTask._id || dailyTask.isComplete) { return of(dailyTask); }
 
-    this.initUser();
-
-    return this.http.put<DailyTask>(this.baseUrl + dailyTask._id + this.updateToCompletPath, dailyTask, this.httpOptions)
+    return this.http.put<DailyTask>(this.baseUrl + dailyTask._id + this.updateToCompletPath, dailyTask)
       .pipe(
         tap((dailyTask: DailyTask) => console.log(`completed task ${dailyTask}`)),
         catchError(this.handleError<DailyTask>('updateTaskToComplete'))

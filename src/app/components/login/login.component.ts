@@ -23,10 +23,10 @@ export class LoginComponent implements OnInit {
   }
 
   loginWithGoogle() {
-    this.authservice.loginWithGoogle().subscribe(user => {
-      localStorage.setItem('user', JSON.stringify(user));
-
+    this.authservice.loginWithGoogle().subscribe(() => {
+      this.authservice.getDataFromFirebase();
       this.router.navigate(['dashboard']);
+
     });
   }
 }

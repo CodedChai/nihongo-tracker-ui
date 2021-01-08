@@ -18,13 +18,13 @@ export class DailyTaskComponent implements OnInit {
 
   tasks: DailyTask[];
 
+  ngOnInit(): void {
+    this.getTasks();
+  }
+
   getTasks(): void {
     this.dailyTaskService.getTasks().subscribe(task => this.tasks = task);
     console.log(this.tasks);
-  }
-
-  ngOnInit(): void {
-    this.getTasks()
   }
 
   addNewTask(chapterNumber: number, pageNumber: number, dueDate: Date): void {
