@@ -12,7 +12,7 @@ export class HeaderInterceptor implements HttpInterceptor {
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
                 "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization",
-                'X-USER-NAME': `${localStorage.getItem('userId')}`
+                'X-USER-NAME': localStorage.getItem('userId')
             }
         }));
     }
